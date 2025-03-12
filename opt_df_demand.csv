@@ -1,0 +1,66 @@
+City,Demand
+Paris,"6,500"
+Cologne,640
+Hanover,180
+Bangalore,"9,100"
+Coimbatore,570
+Delhi,"19,000"
+Mumbai,"14,800"
+Cagliari,90
+Catania,185
+Milan,800
+Rome,"1,700"
+Katowice,170
+Barcelona,"2,800"
+Madrid,"3,700"
+Castle Donington,30
+London,"6,700"
+Mobile,190
+Anchorage,175
+Fairbanks,38
+Phoenix,"2,400"
+Los Angeles,"7,200"
+Ontario,100
+Riverside,"1,200"
+Sacramento,"1,100"
+San Francisco,"1,900"
+Stockton,240
+Denver,"1,500"
+Hartford,540
+Miami,"3,400"
+Lakeland,185
+Tampa,"1,600"
+Atlanta,"3,000"
+Honolulu,500
+Kahului/Maui,16
+Kona,63
+Chicago,"5,100"
+Rockford,172
+Fort Wayne,200
+South Bend,173
+Des Moines,300
+Wichita,290
+New Orleans,550
+Baltimore,"1,300"
+Minneapolis,"1,700"
+Kansas City,975
+St. Louis,"1,200"
+Omaha,480
+Manchester,100
+Albuquerque,450
+New York,"11,200"
+Charlotte,900
+Toledo,290
+Wilmington,150
+Portland,"1,200"
+Allentown,420
+Pittsburgh,"1,000"
+San Juan,"1,100"
+Nashville,650
+Austin,975
+Dallas,"3,300"
+Houston,"3,300"
+San Antonio,"1,100"
+Richmond,600
+Seattle/Tacoma,"2,000"
+Spokane,260
