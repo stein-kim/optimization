@@ -29,18 +29,18 @@ df = pd.read_csv('opt_df_cost_centers.csv')
 df = df.replace(np.nan, '0')
 df_hub_center = df[['Centers', 'CVG', 'AFW']]
 # Change appropriate columns to numeric
-df_hub_center[['CVG', 'AFW']] = df_hub_center[['CVG', 'AFW']].apply(pd.to_numeric, errors='coerce') 
+df_hub_center.loc[:,('CVG', 'AFW')] = df_hub_center.loc[:,('CVG', 'AFW')].astype(float)
 print(df_hub_center)
 df_focus_center = df[['Centers', 'Leipzig', 'Hyderabad', 'San Bernardino']]
 # Change columns to numeric
-df_focus_center[['Leipzig', 'Hyderabad', 'San Bernardino']] = df_focus_center[['Leipzig', 'Hyderabad', 'San Bernardino']].apply(pd.to_numeric, errors='coerce')
+df_focus_center.loc[:,('Leipzig', 'Hyderabad', 'San Bernardino')] = df_focus_center.loc[:,('Leipzig', 'Hyderabad', 'San Bernardino')].astype(float)
 print(df_focus_center)
 
 # Cost for shipping from hub to focus city
 df = pd.read_csv('opt_df_cost_focus.csv')
 df = df.replace(np.nan, '0')
 df_hub_focus = df[['city', 'CVG', 'AFW']]
-df_hub_focus[['CVG', 'AFW']] = df_hub_focus[['CVG', 'AFW']].apply(pd.to_numeric, errors='coerce')
+df_hub_focus.loc[:,('CVG', 'AFW')] = df_hub_focus.loc[:,('CVG', 'AFW')].astype(float)
 print(df_hub_focus)
 
 # Hub and focus city capacities
@@ -69,12 +69,12 @@ yik = LpVariable.dicts('hub_to_center_', [(i,k) for i in hub for k in center], l
 zjk = LpVariable.dicts('focus_to_center_', [(j,k) for j in focus for k in center], lowBound=0, upBound=None, cat='Integer')
 
 # Define the model
-model += (lpSum([df_hub_focus.loc[df_hub_focus['city'] == j, i].values[0] * 
-                 xij[(i, j)] for i in hub for j in focus if (df_hub_focus['city'] == j).any()]) +
-          lpSum([df_hub_center.loc[df_hub_center['Centers'] == k, i].values[0] * 
-                 yik[(i, k)] for i in hub for k in center if (df_hub_center['Centers'] == k).any()]) +
-          lpSum([df_focus_center.loc[df_focus_center['Centers'] == k, j].values[0] * 
-                 zjk[(j, k)] for j in focus for k in center if (df_focus_center['Centers'] == k).any()]))
+model += (lpSum([df_hub_focus.loc[(df_hub_focus['city'] == j), i].values[0] *
+                 xij[(i, j)] for i in hub for j in focus if (df_hub_focus['city'] == j).any() and i in df_hub_focus.columns]) +
+          lpSum([df_hub_center.loc[(df_hub_center['Centers'] == k), i].values[0] * yik[(i, k)]
+                 for i in hub for k in center if (df_hub_center['Centers'] == k).any() and i in df_hub_center.columns]) +
+          lpSum([df_focus_center.loc[(df_focus_center['Centers'] == k), j].values[0] * zjk[(j, k)]
+                 for j in focus for k in center if (df_focus_center['Centers'] == k).any() and j in df_focus_center.columns]))
 
 # Define the constraints:
 # Hub capacities
@@ -92,6 +92,9 @@ for j in focus:
 # Center demand
 for k in center:
   model += lpSum([yik[(i, k)] for i in hub]) + lpSum([zjk[(j, k)] for j in focus]) == df_demand.loc[df_demand['City'] == k, 'Demand'].values[0]
+
+# Print Model
+print(model)
 
 # Solve the model
 model.solve()
